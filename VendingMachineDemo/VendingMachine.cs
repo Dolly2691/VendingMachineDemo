@@ -10,13 +10,14 @@ namespace VendingMachineDemo
     public class VendingMachine
     {
         
-        const int COST_OF_COLA = 100;
-        const int COST_OF_CHIPS = 50;
-        const int COST_OF_CANDY = 65;
+        public const int COST_OF_COLA = 100;
+        public const int COST_OF_CHIPS = 50;
+        public const int COST_OF_CANDY = 65;
         
         public int CurrentAmount { get; set; }
         public VendingMachine()
         {
+            Console.Clear();
             CurrentAmount = 0;
         }
         public bool AddCoin(int money)
@@ -86,6 +87,7 @@ namespace VendingMachineDemo
             }
            
         }
+       
         private void ReturnChange(int selectedProduct)
         {
             
@@ -109,9 +111,10 @@ namespace VendingMachineDemo
         }
         public bool WantToAddMoreCoin()
         {
+            
             if (CurrentAmount >= COST_OF_COLA)
             {
-                Console.Clear();
+               
                 Console.WriteLine("\nEnough Money to Buy Product! Current Amount is {0:C}: " , CurrentAmount);
                 return true;
             }
@@ -130,8 +133,7 @@ namespace VendingMachineDemo
             { return true; }
             else if (input.Equals("N") || input.Equals("n"))
             {
-                Console.WriteLine("\nThank You! Have A Great Day\n");
-                Console.Read();
+                
                 return false;
             }
             else

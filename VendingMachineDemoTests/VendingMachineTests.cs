@@ -12,20 +12,59 @@ namespace VendingMachineDemo.Tests
     public class VendingMachineTests
     {
         [TestMethod()]
-        public void AddCoin_ValidInput_ResultMonedyAdded()
+        public void AddCoin_ValidInput_ResultAmountAdded()
         {
             var vendingMachine= new VendingMachine();
             var result=vendingMachine.AddCoin(5);
             Assert.IsTrue(result);
         }
         [TestMethod()]
-        public void AddCoin_InValidInput_ResultMonedyNotAdded()
+        public void AddCoin_InValidInput_ResultAmountNotAdded()
         {
             var vendingMachine = new VendingMachine();
             var result = vendingMachine.AddCoin(1);
             Assert.IsFalse(result);
         }
+        [TestMethod()]
+        public void WantToAddMoreMoney_InValidInput_ResultAmountNotAdded()
+        {
+            var vendingMachine = new VendingMachine();
+            var result = vendingMachine.WantToAddMoreCoin();
+            Assert.IsFalse(result);
+        }
+        [TestMethod()]
+        public void WantToAddMoreMoney_EnoughMoneyAdded_ResultTrue()
+        {
+            var vendingMachine = new VendingMachine();
+            vendingMachine.CurrentAmount = 110;
+            var result = vendingMachine.WantToAddMoreCoin();
 
-       
+            Assert.IsTrue(result);
+        }
+        [TestMethod()]
+        public void WantToCountineShopping_YAsInput_ResultTrue()
+        {
+            var program = new Program();
+            var result = VendingMachine.WantToCountineShopping("Y");
+            Assert.IsTrue(result);
+        }
+        [TestMethod()]
+        public void WantToCountineShopping_InvalidAsInput_ResultTrue()
+        {
+            var program =new Program();
+         
+            var result = VendingMachine.WantToCountineShopping("XYZ");
+            Assert.IsTrue(result);
+        }
+        [TestMethod()]
+        public void WantToCountineShopping_NAsInput_ResultFalse()
+        {
+            var program = new Program();
+            var result = VendingMachine.WantToCountineShopping("N");
+            Assert.IsFalse(result);
+        }
+
+
+
     }
 }

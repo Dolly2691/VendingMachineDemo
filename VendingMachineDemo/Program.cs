@@ -6,16 +6,17 @@ using System.Threading.Tasks;
 
 namespace VendingMachineDemo
 {
-     class Program
+   public  class Program
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("\n Welcome to Vending Machine ! \n");
+
             do
             {   
                 var vendingMachine = new VendingMachine();
                 do
-                {   
+                {
+                    Console.WriteLine("\n Welcome to Vending Machine !");
                     Console.WriteLine("\nEnter Coin\n");
                     Console.WriteLine("5 for Nickle ");
                     Console.WriteLine("10 for Dime");
