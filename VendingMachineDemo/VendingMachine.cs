@@ -117,7 +117,7 @@ namespace VendingMachineDemo
             }
             else
             {
-                Console.Clear();
+                
                 Console.WriteLine("\nNot Enough Money to Buy Product Add More Coins , Otherwise  Amount to be Returned is {0:C}: " , CurrentAmount);
                 return false;
             }
