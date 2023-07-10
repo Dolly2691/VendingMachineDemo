@@ -129,18 +129,27 @@ namespace VendingMachineDemo
         }
         public static bool WantToCountineShopping(string input)
         {
-            if (input.Equals("Y") || input.Equals("y"))
-            { return true; }
-            else if (input.Equals("N") || input.Equals("n"))
+            bool choice = false;
+            while (!choice)
             {
-                
-                return false;
+
+                if (input.Equals("Y") || input.Equals("y"))
+                { return true; }
+                else if (input.Equals("N") || input.Equals("n"))
+                {
+
+                    return false;
+                }
+                else
+                {
+                    Console.WriteLine("\nInvalid Input!..Press Y to Continue or N to Stop!\n");
+                    choice = VendingMachine.WantToCountineShopping(Console.ReadLine());
+                    return choice;
+
+                }
+
             }
-            else
-            {
-                Console.WriteLine("\nInvalid Input!..Press Y to Continue or N to Stop!\n");
-                return true;
-            }
+            return choice;
         }
     }
 }
