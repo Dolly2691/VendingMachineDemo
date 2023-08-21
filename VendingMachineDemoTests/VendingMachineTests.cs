@@ -15,21 +15,21 @@ namespace VendingMachineDemo.Tests
         public void AddCoin_ValidInput_ResultAmountAdded()
         {
             var vendingMachine= new VendingMachine();
-            var result=vendingMachine.AddCoin(5);
+            var result=vendingMachine.AddCointoCurrentAmount(.05);
             Assert.IsTrue(result);
         }
         [TestMethod()]
         public void AddCoin_InValidInput_ResultAmountNotAdded()
         {
             var vendingMachine = new VendingMachine();
-            var result = vendingMachine.AddCoin(1);
+            var result = vendingMachine.AddCointoCurrentAmount(1);
             Assert.IsFalse(result);
         }
         [TestMethod()]
         public void WantToAddMoreMoney_InValidInput_ResultAmountNotAdded()
         {
             var vendingMachine = new VendingMachine();
-            var result = vendingMachine.WantToAddMoreCoin();
+            var result = vendingMachine.LookForAvailableProduct();
             Assert.IsFalse(result);
         }
         [TestMethod()]
@@ -37,7 +37,7 @@ namespace VendingMachineDemo.Tests
         {
             var vendingMachine = new VendingMachine();
             vendingMachine.CurrentAmount = 110;
-            var result = vendingMachine.WantToAddMoreCoin();
+            var result = vendingMachine.LookForAvailableProduct();
 
             Assert.IsTrue(result);
         }

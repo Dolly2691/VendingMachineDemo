@@ -1,141 +1,132 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
+using static VendingMachineDemo.Enum;
 
 namespace VendingMachineDemo
 {
     public class VendingMachine
     {
+        Coin coin = new Coin();
+        Product product = new Product();
+      
         
-        public const int COST_OF_COLA = 100;
-        public const int COST_OF_CHIPS = 50;
-        public const int COST_OF_CANDY = 65;
-        
-        public int CurrentAmount { get; set; }
+        public double CurrentAmount { get; set; }
         public VendingMachine()
         {
             Console.Clear();
-            CurrentAmount = 0;
+            CurrentAmount = 0.0;
         }
-        public bool AddCoin(int money)
+        public bool AddCointoCurrentAmount(double money)
         {
             switch (money)
             {
-                case 5:
-                    CurrentAmount += Convert.ToInt32(Enum.Coins.Nickle);
+                case .05:
+                    CurrentAmount += Convert.ToDouble(coin.NICKLE);
                     break;
-                case 10:
-                      CurrentAmount += Convert.ToInt32(Enum.Coins.Dime);
+                case .1:
+                      CurrentAmount += Convert.ToDouble(coin.DIME);
                     break;
 
-                case 25:
-                     CurrentAmount += Convert.ToInt32(Enum.Coins.Quarter);
+                case .25:
+                     CurrentAmount += Convert.ToDouble(coin.QUARTER);
                     break;
                 
                 default:
                     
                     Console.WriteLine("\n****Invalid Entry****\n");
-                    return false;
-                    
-
-                    
+                    return false;    
             }
             return true;
         }
-        public void ShowProductSelection()
+        
+      
+        public  bool LookForAvailableProduct ()
         {
-            Console.WriteLine("Press 1 for COLA for $100");
-            Console.WriteLine("Press 2 for CHIPS for $50");
-            Console.WriteLine("Press 3 for CANDY for $65 \n");
-            Console.WriteLine("*** Please Choose Your Product ***\n");
-             SelectProduct(Convert.ToInt32(Console.ReadLine()));
-            Console.WriteLine("\n________Press Y to Continue or N to Stop!_______\n");
+            if (CurrentAmount >= product.COLAPRICE)
+            {
+                Console.WriteLine("\n Enough Money to buy any product ! Current Amount is {0}: ", CurrentAmount);
+               product.ShowProductForSelection(CurrentAmount);
+                return true;
+            }
+            else if
+            (CurrentAmount < product.COLAPRICE)
+            {
+                return WantToAddMoreCoin(CurrentAmount);
+            }
+            else
+            {
+               Console.WriteLine("\nNot Enough Money to Buy Product Add More Coins , Otherwise  Amount to be Returned is {0:C}: " , CurrentAmount);
+                return WantToAddMoreCoin(CurrentAmount);
+            }
+
             
         }
-
-        private void SelectProduct(int choiceOfProduct)
+        public void showMessageBasedonCurrentAmount(double currentAmount)
         {
-            bool selectionOkay = false;
-            while (!selectionOkay)
+             if (currentAmount >= product.CANDYPRICE)
             {
-                switch (choiceOfProduct)
-                {
-                    case 1:
-                        Console.WriteLine("Thank you for Choosing COLA\n");
-                        ReturnChange(choiceOfProduct);
-                        selectionOkay = true;
-
-                        break;
-                    case 2:
-                        Console.WriteLine("Thank you for Choosing CHIPS\n");
-                        ReturnChange(choiceOfProduct);
-                        selectionOkay = true; break;
-                    case 3:
-                        Console.WriteLine("Thank you for Choosing CANDY\n");
-                        ReturnChange(choiceOfProduct);
-                        selectionOkay = true; break;
-                    default:
-                        Console.WriteLine("Invalid Choice , Please re-enter your choice\n\n");
-                        choiceOfProduct = Convert.ToInt32(Console.ReadLine());
-                        selectionOkay = false;
-                        break;
-
-                }
+                Console.WriteLine("\nEnough Money to buy Chips or Candy! Current Amount is {0}: ", CurrentAmount);
+                Console.WriteLine(" Press B to Buy Product or Press R to get back your coins or Press Y to add more Coin");
             }
-           
+            else if (currentAmount >= product.CHIPSPRICE)
+            {
+                Console.WriteLine("\nEnough Money to buy Chips! Current Amount is {0}: ", CurrentAmount);
+                Console.WriteLine(" Press B to Buy Product or Press R to get back your coins or Press Y to add more Coin");
+            }
+            else
+            {
+                Console.WriteLine("Not Enough Money to Buy Product Add More Coins , Otherwise  Amount to be Returned is {0:C}: ", CurrentAmount);
+                Console.WriteLine("Press R to get back your coins or Press Y to add more Coins");
+            }
         }
-       
-        private void ReturnChange(int selectedProduct)
+        public  bool WantToAddMoreCoin( double currentAmount)
         {
-            
-            if (selectedProduct == Convert.ToInt32(Enum.Product.Cola))
-            {
-                if (CurrentAmount > COST_OF_COLA)
-                    Console.WriteLine("\nYour Change is {0:C}", CurrentAmount - COST_OF_COLA);
-            }
-            else if (selectedProduct == Convert.ToInt32(Enum.Product.Chips))
-            { 
-            if (CurrentAmount > COST_OF_CHIPS)
-                Console.WriteLine("\nYour Change is {0:C}", CurrentAmount - COST_OF_CHIPS);
-            }
-            else if (selectedProduct == Convert.ToInt32(Enum.Product.Candy))
-            {
-                    if (CurrentAmount > COST_OF_CANDY)
-                        Console.WriteLine("\nYour Change is {0:C}", CurrentAmount - COST_OF_CANDY);
-            }
+            showMessageBasedonCurrentAmount(currentAmount);
 
 
-        }
-        public bool WantToAddMoreCoin()
-        {
-            
-            if (CurrentAmount >= COST_OF_COLA)
+            string inputValue = Console.ReadLine();
+            if (inputValue.ToLower() == "r")
             {
+                Console.WriteLine("Please collect your coin : {0}", currentAmount);
                
-                Console.WriteLine("\nEnough Money to Buy Product! Current Amount is {0:C}: " , CurrentAmount);
+                return false;
+            }
+            else if (inputValue.ToLower() == "y")
+            {
+                coin.showMessageToEnterCoin(); 
+                AddCointoCurrentAmount(Convert.ToDouble(Console.ReadLine()));
+                return LookForAvailableProduct();
+            }
+            else if (inputValue.ToLower() == "b")
+            {
+                product.ShowProductForSelection(currentAmount);
                 return true;
             }
             else
             {
-                
-                Console.WriteLine("\nNot Enough Money to Buy Product Add More Coins , Otherwise  Amount to be Returned is {0:C}: " , CurrentAmount);
-                return false;
+                Console.WriteLine("Invalid Entry, Try Again to Add Coin");
+                coin.showMessageToEnterCoin();
+                AddCointoCurrentAmount(Convert.ToDouble(Console.ReadLine()));
+                return LookForAvailableProduct();
             }
-
-            
         }
         public static bool WantToCountineShopping(string input)
         {
             bool choice = false;
+           
             while (!choice)
             {
 
-                if (input.Equals("Y") || input.Equals("y"))
-                { return true; }
-                else if (input.Equals("N") || input.Equals("n"))
+                if (input.ToLower().Equals("y") )
+                { 
+                    return true;
+                }
+                else if (input.ToLower().Equals("n"))
                 {
 
                     return false;
